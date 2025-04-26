@@ -1,0 +1,47 @@
+
+services:
+  # PHP + Composer service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - user=${USER:-laravel}
+        - uid=${UID:-1000}
+    container_name: paynet-task
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+    networks:
+      - laravel-network
+
+  # Nginx service
+  webserver:
+    image: nginx:alpine
+    container_name: laravel-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - laravel-network
+
+  # MailHog service
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: laravel-mailhog
+    restart: unless-stopped
+    ports:
+      - "8025:8025" # MailHog web UI
+    networks:
+      - laravel-network
+
+networks:
+  laravel-network:
+    driver: bridge
