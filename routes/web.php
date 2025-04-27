@@ -18,3 +18,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// custom routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::post('/api/logout', [AuthController::class, 'logout']);
+});
+
+// Public API routes
+Route::post('/api/login', [AuthController::class, 'login']);
+Route::get('/api/cep/{cep}', [CepController::class, 'show']);

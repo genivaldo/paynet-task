@@ -28,7 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if ($request->wantsJson()) {
+            return response()->json([
+                'token' => $request->user()->createToken('auth_token')->plainTextToken,
+                'user' => $request->user()
+            ]);
+        }
+    
+        return redirect()->intended(config('app.home'));
     }
 
     /**
