@@ -13,7 +13,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
      * The attributes that are mass assignable.
