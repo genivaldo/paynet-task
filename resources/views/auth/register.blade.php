@@ -92,3 +92,24 @@
 
     </form>
 </x-guest-layout>
+<script>
+document.getElementById('zip_code').addEventListener('blur', function() {
+    const cep = this.value.replace(/\D/g, '');
+    if (cep.length !== 8) return;
+
+    fetch(`/api/cep/${cep}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            document.querySelector('input[name="address[street]"]').value = data.street || '';
+            document.querySelector('input[name="address[neighborhood]"]').value = data.neighborhood || '';
+            document.querySelector('input[name="address[city]"]').value = data.city || '';
+            document.querySelector('input[name="address[state]"]').value = data.state || '';
+        })
+        .catch(error => console.error('Error:', error));
+});
+</script>

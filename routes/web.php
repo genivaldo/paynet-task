@@ -3,10 +3,13 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Api\CepController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/api/cep/{cep}', [CepController::class, 'show']);
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -27,4 +30,3 @@ require __DIR__.'/auth.php';
 
 // Public API routes
 Route::post('/api/login', [AuthController::class, 'login']);
-Route::get('/api/cep/{cep}', [CepController::class, 'show']);

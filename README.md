@@ -1,61 +1,202 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Paynet Task - User Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-## About Laravel
+A complete user management system with authentication, address management, and API integration built with Laravel.
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- User registration with extended address fields
+- Sanctum API token authentication
+- Email verification and password reset
+- CEP (Brazilian postal code) lookup via external API
+- Responsive user dashboard
+- Dockerized development environment
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Docker and Docker Compose installed
+- Git
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Laravel 12
+- Laravel Breeze (Blade)
+- Laravel Sanctum
+- Docker
+- MailHog (for email testing)
+- ViaCEP API
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone the repository**
+   ```bash
+   git https://github.com/genivaldo/paynet-task.git
+   cd paynet-task
+   ```
 
-## Laravel Sponsors
+2. **Setup environment**
+   ```bash
+   cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+   DB_CONNECTION=sqlite
+   DB_DATABASE=/var/www/database/database.sqlite
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+   SANCTUM_STATEFUL_DOMAINS=localhost,127.0.0.1
+    SESSION_DRIVER=database
+    SESSION_LIFETIME=120
+    SESSION_ENCRYPT=false
+    SESSION_PATH=/
+    SESSION_DOMAIN=localhost
+    SESSION_SECURE_COOKIE=false
 
-## Contributing
+    MAIL_MAILER=smtp
+    MAIL_SCHEME=null
+    MAIL_HOST=mailhog
+    MAIL_PORT=1025
+    MAIL_USERNAME=null
+    MAIL_PASSWORD=null
+    MAIL_FROM_ADDRESS="hello@example.com"
+    MAIL_FROM_NAME="${APP_NAME}"
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Start Docker containers**
+   ```bash
+   docker-compose up -d
+   ```
 
-## Code of Conduct
+4. **Install dependencies**
+   ```bash
+   docker exec -it paynet-task composer install
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Generate application key**
+   ```bash
+   docker exec -it paynet-task php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+6. **Run migrations**
+   ```bash
+   docker exec -it paynet-task php artisan migrate
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. Install frontend dependencies:
+    ```bash
+    docker exec -it paynet-task npm install
+    docker exec -it paynet-task npm run dev
+    ```
+## Project Structure
+
+```
+paynet-task/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/ - API controllers
+│   │   │   └── Auth/ - Authentication controllers
+│   │   └── Providers/ - Service providers
+│   ├── Models/ - Database models
+├── config/ - Configuration files
+├── database/
+│   ├── migrations/ - Database migrations
+│   └── seeders/ - Database seeders
+├── resources/
+│   ├── views/ - Blade templates
+│   └── js/ - JavaScript assets
+├── routes/ - Application routes
+└── tests/ - Automated tests
+```  └── dashboard.blade.php
+```
+
+## Running the Application
+
+The application will be available at:
+- Web interface: http://localhost:8080
+- MailHog (email testing): http://localhost:8025
+
+To stop the containers:
+    ```bash
+    docker-compose down
+    ```
+
+
+## API Endpoints
+
+### CEP Lookup
+```
+GET /api/cep/{cep}
+```
+Example: `/api/cep/01001000`
+
+Response:
+```json
+{
+  "street": "Praça da Sé",
+  "neighborhood": "Sé",
+  "city": "São Paulo",
+  "state": "SP"
+}
+```
+
+### Authentication
+```
+POST /api/login
+```
+Body:
+```json
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+```
+
+## Usage
+
+1. Access the application at `http://localhost:8080`
+2. Register a new account
+3. The dashboard will show all registered users
+4. Use the API endpoints with your Sanctum token
+
+## Development
+
+### Running Tests
+```bash
+docker exec -it paynet-task php artisan test
+```
+
+### Debugging Emails
+Access MailHog at `http://localhost:8025`
+
+### Clearing Caches
+```bash
+docker exec -it paynet-task php artisan optimize:clear
+```
+
+## Architecture Highlights
+
+1. **Service Provider Pattern**
+   - CEP API logic encapsulated in `CepServiceProvider`
+   - Injectable service throughout the application
+
+2. **SOLID Principles**
+   - Single Responsibility: Controllers only handle HTTP
+   - Open/Closed: Services can be extended
+   - Dependency Inversion: Services are injectable
+
+3. **Security**
+   - CSRF protection for web routes
+   - Sanctum tokens for API authentication
+   - Rate limiting on sensitive endpoints
+
+## Environment Variables
+
+| Key | Description |
+|-----|-------------|
+| `APP_URL` | Application base URL |
+| `MAIL_MAILER` | Mail driver (smtp/mailhog) |
+| `SANCTUM_STATEFUL_DOMAINS` | Domains for Sanctum cookies |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
